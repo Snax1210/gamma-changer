@@ -32,7 +32,7 @@ A powerful display calibration tool designed specifically for Windows platform t
 
 ### From Pre-built Binary
 
-1. Download the latest release from the [Releases](https://github.com/yourusername/gamma-changer/releases) page
+1. Download the latest release from the [Releases](https://github.com/Snax1210/gamma-changer/releases) page
 2. Extract the archive to your desired location
 3. Run `gammactl.exe` to launch the application
 
@@ -40,7 +40,7 @@ A powerful display calibration tool designed specifically for Windows platform t
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/gamma-changer.git
+git clone https://github.com/Snax1210/gamma-changer.git
 cd gamma-changer
 ```
 
@@ -264,7 +264,7 @@ Contributions are welcome! Please follow these steps:
 
 If you encounter any issues or have questions:
 
-- Open an issue on [GitHub Issues](https://github.com/yourusername/gamma-changer/issues)
+- Open an issue on [GitHub Issues](https://github.com/Snax1210/gamma-changer/issues)
 - Check existing documentation and discussions
 - Contact the maintainers
 
