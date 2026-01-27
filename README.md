@@ -6,6 +6,11 @@ A powerful display calibration tool designed specifically for Windows platform t
 ![Platform](https://img.shields.io/badge/Platform-Windows-blue)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+## Preview
+
+<img width="1321" height="931" alt="image" src="https://github.com/user-attachments/assets/3d329cef-3e57-453e-96ca-4dc781207d0a" />
+
+
 ## Features
 
 - **Real-time Display Adjustment**: Adjust Gamma, brightness, contrast, and RGB gain values in real-time
@@ -20,7 +25,6 @@ A powerful display calibration tool designed specifically for Windows platform t
 ## System Requirements
 
 - **Operating System**: Windows 10/11 (64-bit)
-- **Go Runtime**: Go 1.24.10 or higher (for building from source)
 - **Memory**: 50MB minimum RAM
 - **Disk Space**: 20MB for installation
 
