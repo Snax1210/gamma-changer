@@ -34,7 +34,7 @@ func NewPresetListUI(
 ) *PresetListUI {
 	plui := &PresetListUI{
 		Container:    container.NewVBox(),
-		BindingHint:  widget.NewLabel("Hotkeys: click Bind then press a key (Ctrl+Alt+<Key>)"),
+		BindingHint:  widget.NewLabel(app.HotkeyBindHint()),
 		status:       status,
 		reloadCore:   reloadCore,
 		shiftHotkeys: shiftHotkeys,

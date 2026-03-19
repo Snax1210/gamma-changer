@@ -1,6 +1,7 @@
 # Gamma Changer
 
-A powerful display calibration tool designed specifically for Windows platform that allows real-time adjustment of monitor Gamma, brightness, contrast, and RGB gain through software LUT (Look-Up Table).
+A powerful display calibration tool designed specifically for Windows platform that allows real-time adjustment of
+monitor Gamma, brightness, contrast, and RGB gain through software LUT (Look-Up Table).
 
 ![Go Version](https://img.shields.io/badge/Go-1.24.10-blue)
 ![Platform](https://img.shields.io/badge/Platform-Windows-blue)
@@ -10,12 +11,12 @@ A powerful display calibration tool designed specifically for Windows platform t
 
 <img width="1321" height="931" alt="image" src="https://github.com/user-attachments/assets/3d329cef-3e57-453e-96ca-4dc781207d0a" />
 
-
 ## Features
 
 - **Real-time Display Adjustment**: Adjust Gamma, brightness, contrast, and RGB gain values in real-time
 - **Preset Management**: Create, save, apply, rename, and delete custom display presets
-- **Global Hotkey Support**: Configure and use global hotkeys (Ctrl+Alt+Key) for quick preset switching
+- **Flexible Hotkey Modes**: Choose between `Ctrl+Alt+Key` (default) or single-key hotkey mode at build time for quick
+  preset switching
 - **Multi-Monitor Support**: Manage settings for multiple displays independently
 - **Backup & Restore**: Automatically backup original settings and restore them when needed
 - **Auto-Start**: Option to launch the application automatically on Windows boot
@@ -39,22 +40,34 @@ A powerful display calibration tool designed specifically for Windows platform t
 ### Building from Source
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/Snax1210/gamma-changer.git
 cd gamma-changer
 ```
 
 2. Install dependencies:
+
 ```bash
 go mod download
 ```
 
 3. Build the application:
+
+**Default build** (Ctrl+Alt+Key hotkeys):
+
 ```bash
 go build -o gammactl.exe ./cmd/gammactl
 ```
 
+**Single-key hotkey build** — triggers on a single key press, no modifier required:
+
+```bash
+go build -tags singlekey -o gammactl.exe ./cmd/gammactl
+```
+
 4. Run the application:
+
 ```bash
 ./gammactl.exe
 ```
@@ -93,21 +106,27 @@ gammactl get
 ## Parameters
 
 ### Gamma
+
 - **Range**: 0.30 - 4.40
 - **Default**: 1.0
-- **Description**: Controls the overall gamma curve of the display. Higher values make the image brighter, lower values make it darker.
+- **Description**: Controls the overall gamma curve of the display. Higher values make the image brighter, lower values
+  make it darker.
 
 ### Brightness
+
 - **Range**: -1.00 - 1.00
 - **Default**: 0.0
-- **Description**: Adjusts the overall brightness level. Positive values increase brightness, negative values decrease it.
+- **Description**: Adjusts the overall brightness level. Positive values increase brightness, negative values decrease
+  it.
 
 ### Contrast
+
 - **Range**: 0.10 - 3.00
 - **Default**: 1.0
 - **Description**: Controls the contrast ratio. Higher values increase contrast, lower values decrease it.
 
 ### RGB Gain
+
 - **Range**: 0.0 - 2.0 (per channel)
 - **Default**: 1.0 (all channels)
 - **Description**: Independent adjustment for Red, Green, and Blue channels to fine-tune color balance.
@@ -138,26 +157,33 @@ The application comes with four built-in presets:
 
 ## Hotkey Configuration
 
+Gamma Changer supports two hotkey modes, selected at build time via Go build tags:
+
+### Hotkey Modes
+
+| Mode                       | Build Command                             | Hotkey Format    | Use Case                                          |
+|----------------------------|-------------------------------------------|------------------|---------------------------------------------------|
+| **Default** (Ctrl+Alt+Key) | `go build ./cmd/gammactl`                 | `Ctrl+Alt+<Key>` | General purpose, avoids conflicts                 |
+| **Single-key**             | `go build -tags singlekey ./cmd/gammactl` | `<Key>`          | Minimal input, e.g. dedicated keyboard, streaming |
+
 ### Setting Up Hotkeys
 
-1. Open the Hotkey Configuration dialog
-2. Click on the preset you want to assign a hotkey to
-3. Press the desired key combination (Ctrl+Alt+Key)
-4. Click "Save"
-
-### Default Hotkeys
-
-- `Ctrl+Alt+1`: Apply Default preset
-- `Ctrl+Alt+2`: Apply Office preset
-- `Ctrl+Alt+3`: Apply Night preset
-- `Ctrl+Alt+4`: Apply Coding preset
+1. Click the "Bind" button next to the preset you want to assign a hotkey to
+2. A dialog will appear showing the current hotkey mode
+3. Press the desired key (A-Z or 0-9)
+4. The hotkey is saved and applied immediately
 
 ### Hotkey Format
 
-All hotkeys use the format `Ctrl+Alt+[Key]`, where `[Key]` can be:
-- Number keys (0-9)
-- Letter keys (A-Z)
-- Function keys (F1-F12)
+**Default mode** — `Ctrl+Alt+[Key]`:
+
+- `Ctrl+Alt+1` through `Ctrl+Alt+9`: Number keys
+- `Ctrl+Alt+A` through `Ctrl+Alt+Z`: Letter keys
+
+**Single-key mode** — just the key itself:
+
+- `1` through `9`: Number keys
+- `A` through `Z`: Letter keys
 
 ## Configuration Files
 
@@ -167,6 +193,7 @@ All hotkeys use the format `Ctrl+Alt+[Key]`, where `[Key]` can be:
 - **Purpose**: Stores application settings, presets, and hotkey configurations
 
 Example configuration:
+
 ```json
 {
   "presets": {
@@ -174,7 +201,11 @@ Example configuration:
       "gamma": 1.0,
       "brightness": 0.0,
       "contrast": 1.0,
-      "rgbGain": [1.0, 1.0, 1.0]
+      "rgbGain": [
+        1.0,
+        1.0,
+        1.0
+      ]
     }
   },
   "hotkeys": {
@@ -198,22 +229,32 @@ Example configuration:
 gamma-changer/
 ├── cmd/
 │   └── gammactl/
-│       └── main.go          # GUI application entry point
+│       ├── main.go              # GUI application entry point
+│       ├── controller/          # MVC controllers
+│       │   ├── state_controller.go
+│       │   └── preset_controller.go
+│       └── ui/                  # Fyne UI components
+│           ├── app.go
+│           ├── window.go
+│           ├── sliders.go
+│           ├── display_selector.go
+│           ├── preset_list.go
+│           ├── preset_dialog.go
+│           └── hotkey_dialog.go
 ├── internal/
 │   ├── app/
-│   │   ├── app.go           # Core application logic
-│   │   ├── config.go        # Configuration file management
-│   │   ├── hotkeys.go       # Hotkey manager
-│   │   └── autostart_windows.go  # Windows auto-start
-│   ├── win/
-│   │   ├── gamma/
-│   │   │   ├── ramp.go       # Gamma Ramp operations (Windows API)
-│   │   │   └── display_enum.go  # Display enumeration
-│   │   └── monitor/
-│   └── preset/
-├── ui/                      # UI resources directory
-├── go.mod                   # Go module definition
-└── go.sum                   # Dependency checksums
+│   │   ├── app.go               # Core application logic
+│   │   ├── config.go            # Configuration file management
+│   │   ├── hotkeys.go           # Hotkey manager (runtime)
+│   │   ├── hotkey_format_default.go  # Ctrl+Alt format (!singlekey)
+│   │   ├── hotkey_format_single.go   # Single-key format (singlekey)
+│   │   └── autostart_windows.go      # Windows auto-start
+│   └── win/
+│       └── gamma/
+│           ├── ramp.go           # Gamma Ramp operations (Windows API)
+│           └── display_enum.go   # Display enumeration
+├── go.mod                       # Go module definition
+└── go.sum                       # Dependency checksums
 ```
 
 ### Technology Stack
@@ -234,6 +275,7 @@ gamma-changer/
 ### Windows API Integration
 
 The application uses the following Windows APIs:
+
 - `EnumDisplayMonitors`: Enumerate all connected displays
 - `GetDeviceGammaRamp`: Retrieve current gamma ramp
 - `SetDeviceGammaRamp`: Apply new gamma ramp values
@@ -275,14 +317,25 @@ If you encounter any issues or have questions:
 
 ## Changelog
 
+### Version 1.1.0
+
+- Added single-key hotkey mode (`-tags singlekey`) alongside the default Ctrl+Alt+Key mode
+- Hotkey format is now configurable via Go build tags at compile time
+
+### Version 1.0.1
+
+- Optimize code structure
+
 ### Version 1.0.0
+
 - Initial release
 - Real-time display parameter adjustment
 - Preset management system
-- Global hotkey support
+- Global hotkey support (Ctrl+Alt+Key)
 - Multi-monitor support
 - Auto-start functionality
 
 ---
 
-**Note**: This software modifies display settings at the system level. Always backup your original settings before making changes. The authors are not responsible for any damage to your display hardware.
+**Note**: This software modifies display settings at the system level. Always backup your original settings before
+making changes. The authors are not responsible for any damage to your display hardware.

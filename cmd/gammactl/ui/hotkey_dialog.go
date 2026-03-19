@@ -26,13 +26,10 @@ func ShowHotkeyBindDialog(
 	refreshPresetList func(),
 ) {
 	entry := widget.NewEntry()
-	entry.SetPlaceHolder("Press A-Z or 0-9 (no need to hold Ctrl/Alt)")
+	entry.SetPlaceHolder("Press A-Z or 0-9")
 	entry.Wrapping = fyne.TextWrapOff
 
-	info := widget.NewLabel(fmt.Sprintf(
-		"Binding preset '%s'\nResult will be: Ctrl+Alt+<Key>\n(Press one key: A-Z / 0-9)",
-		name,
-	))
+	info := widget.NewLabel(app.HotkeyBindDialogInfo(name))
 	info.Wrapping = fyne.TextWrapWord
 
 	var d dialog.Dialog
@@ -52,7 +49,7 @@ func ShowHotkeyBindDialog(
 
 		r := []rune(s)[0]
 		key := strings.ToUpper(string(r))
-		spec := formatHotkeySpec(key)
+		spec := app.FormatHotkeySpec(key)
 
 		// 保存热键
 		stDisk := app.LoadStateOrDefault()
@@ -66,7 +63,7 @@ func ShowHotkeyBindDialog(
 		reloadCoreFromDisk()
 		completed = true
 		status(fmt.Sprintf("Bound preset '%s' -> %s", name, spec))
-		bindingHint.SetText("Hotkeys: click Bind then press a key (Ctrl+Alt+<Key>)")
+		bindingHint.SetText(app.HotkeyBindHint())
 
 		if d != nil {
 			d.Hide()
@@ -86,12 +83,12 @@ func ShowHotkeyBindDialog(
 				return
 			}
 			status("Bind canceled.")
-			bindingHint.SetText("Hotkeys: click Bind then press a key (Ctrl+Alt+<Key>)")
+			bindingHint.SetText(app.HotkeyBindHint())
 		},
 		w,
 	)
 
-	bindingHint.SetText(fmt.Sprintf("Binding preset '%s'... (via dialog)", name))
+	bindingHint.SetText(fmt.Sprintf("Binding preset '%s'...", name))
 	d.Show()
 
 	// 延迟聚焦到输入框
@@ -108,9 +105,4 @@ func validateHotkeyInput(s string) bool {
 	r := []rune(s)[0]
 	key := strings.ToUpper(string(r))
 	return len(key) == 1 && ((key[0] >= '0' && key[0] <= '9') || (key[0] >= 'A' && key[0] <= 'Z'))
-}
-
-// formatHotkeySpec 格式化热键规范
-func formatHotkeySpec(key string) string {
-	return "Ctrl+Alt+" + key
 }
