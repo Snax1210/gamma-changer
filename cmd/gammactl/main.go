@@ -83,6 +83,9 @@ func main() {
 	// 设置窗口内容
 	ui.SetWindowContent(w, content)
 
+	// 配置系统托盘：关闭窗口时最小化到托盘
+	ui.SetupSystemTray(gui, w)
+
 	// 初次渲染预设列表
 	presetListUI.Refresh()
 
